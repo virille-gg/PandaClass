@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sebelas TKJ 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest-deep:#24402f;
+    --forest-mid:#3c6a4c;
+    --forest-soft:#5c8a67;
+    --moss:#8fb37e;
+    --bamboo:#b8d66a;
+    --bamboo-dark:#7fa04a;
+    --mist:#e9f3ea;
+    --cream:#fbf8ef;
+    --panda-black:#26241f;
+    --sky-top:#cdeae4;
+    --sky-bottom:#f4f6e9;
+    --wood:#93643f;
+    --wood-dark:#6d492c;
+    --lantern:#d9714a;
+    --ink:#2b3327;
+    --radius-lg:28px;
+    --radius-md:18px;
+    --shadow:0 10px 30px rgba(36,64,47,0.15);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Nunito',sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,var(--sky-top) 0%, var(--sky-bottom) 340px, var(--mist) 340px, var(--mist) 100%);
+    min-height:100vh;
+  }
+  h1,h2,h3,.display{font-family:'Fredoka',sans-serif; margin:0;}
+  p{line-height:1.6;}
+  button{font-family:'Nunito',sans-serif;cursor:pointer;}
+  .hidden{display:none !important;}
+
+  /* ---------- NAV ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg,var(--forest-deep),var(--forest-mid));
+    box-shadow:0 4px 18px rgba(0,0,0,0.18);
+  }
+  .topbar-inner{
+    max-width:1080px;margin:0 auto;padding:14px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:10px;color:var(--cream);cursor:pointer;}
+  .brand-emoji{font-size:28px;}
+  .brand-text .name{font-family:'Fredoka',sans-serif;font-size:19px;font-weight:600;line-height:1;}
+  .brand-text .tagline{font-size:11px;opacity:.75;letter-spacing:.03em;}
+  .navlinks{display:flex;gap:8px;flex-wrap:wrap;}
+  .navlinks button{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.14);
+    color:var(--mist);
+    padding:9px 16px;
+    border-radius:999px;
+    font-size:14px;font-weight:700;
+    display:flex;align-items:center;gap:6px;
+    transition:.18s;
+  }
+  .navlinks button:hover{background:rgba(255,255,255,0.18);}
+  .navlinks button.active{background:var(--bamboo);color:var(--forest-deep);border-color:var(--bamboo);}
+
+  main{max-width:1080px;margin:0 auto;padding:0 20px 80px;}
+
+  /* ---------- HERO / HABITAT SCENE ---------- */
+  .scene-wrap{
+    position:relative;
+    border-radius:0 0 40px 40px;
+    overflow:hidden;
+    height:420px;
+    margin-bottom:36px;
+    box-shadow:var(--shadow);
+  }
+  .scene-wrap svg{width:100%;height:100%;display:block;}
+  .hero-caption{
+    position:absolute; left:0; right:0; top:30px; text-align:center; color:var(--forest-deep);
+    pointer-events:none;
+  }
+  .hero-caption .kelas-name{
+    font-size:clamp(28px,5vw,46px); font-weight:700; text-shadow:0 2px 0 rgba(255,255,255,0.5);
+  }
+  .hero-caption .kelas-tagline{
+    font-size:15px; font-weight:700; opacity:.75; margin-top:4px;
+  }
+  .edit-name-btn{
+    pointer-events:auto; margin-top:10px; background:rgba(255,255,255,0.55);
+    border:none; border-radius:999px; padding:6px 14px; font-size:12px; font-weight:800;
+    color:var(--forest-deep);
+  }
+
+  /* SVG animation classes */
+  .cloud{animation:drift linear infinite;}
+  @keyframes drift{from{transform:translateX(-60px);}to{transform:translateX(900px);}}
+  .mountain-back{fill:#a9cfc0;}
+  .mountain-front{fill:#8fc0a6;}
+  .hill{fill:var(--forest-soft);}
+  .bamboo-sway{transform-origin:bottom center; animation:sway 4.5s ease-in-out infinite;}
+  @keyframes sway{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+  .leaf{animation:fall linear infinite;}
+  @keyframes fall{
+    0%{transform:translate(0,0) rotate(0deg);opacity:0;}
+    10%{opacity:1;}
+    100%{transform:translate(-30px,340px) rotate(200deg);opacity:0;}
+  }
+  .panda-breathe{transform-origin:center bottom;animation:breathe 3.2s ease-in-out infinite;}
+  @keyframes breathe{0%,100%{transform:scaleY(1);}50%{transform:scaleY(1.018);}}
+  .panda-arm-wave{transform-origin:210px 235px;animation:wave 4s ease-in-out infinite;animation-delay:1s;}
+  @keyframes wave{0%,20%,100%{transform:rotate(0deg);}5%{transform:rotate(-18deg);}10%{transform:rotate(4deg);}15%{transform:rotate(-14deg);}}
+  .panda-ear{transform-origin:bottom center;animation:earwiggle 3.6s ease-in-out infinite;}
+  @keyframes earwiggle{0%,100%{transform:rotate(0deg);}50%{transform:rotate(4deg);}}
+  .eyelid{animation:blink 4.4s ease-in-out infinite;}
+  @keyframes blink{0%,92%,100%{transform:scaleY(0);}95%{transform:scaleY(1);}}
+  .pupils{animation:lookaround 7s ease-in-out infinite;}
+  @keyframes lookaround{0%,20%{transform:translateX(0);}30%,45%{transform:translateX(3px);}55%,70%{transform:translateX(-3px);}85%,100%{transform:translateX(0);}}
+  @media (prefers-reduced-motion:reduce){
+    .cloud,.bamboo-sway,.leaf,.panda-breathe,.panda-arm-wave,.panda-ear,.eyelid,.pupils{animation:none !important;}
+  }
+
+  /* ---------- CARDS / SECTIONS ---------- */
+  .section-head{margin-bottom:22px;}
+  .section-head h2{font-size:30px;color:var(--forest-deep);}
+  .section-head .desc{color:#5b6b5c;font-size:15px;margin-top:4px;}
+  .eyebrow{
+    display:inline-block;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--forest-mid);background:var(--bamboo);padding:4px 12px;border-radius:999px;margin-bottom:10px;
+  }
+
+  .card{
+    background:var(--cream);
+    border-radius:var(--radius-lg);
+    padding:24px;
+    box-shadow:var(--shadow);
+    border:1px solid rgba(36,64,47,0.06);
+    margin-bottom:22px;
+  }
+  .card h3{font-size:19px;color:var(--forest-deep);margin-bottom:14px;}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  @media(max-width:720px){.grid-2{grid-template-columns:1fr;}}
+
+  input[type=text],input[type=tel],textarea,select{
+    width:100%;padding:11px 14px;border-radius:12px;border:2px solid #dde8dd;
+    font-family:'Nunito',sans-serif;font-size:14.5px;background:#fff;color:var(--ink);
+    transition:.15s;
+  }
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--forest-soft);}
+  label{font-size:13px;font-weight:800;color:var(--forest-deep);display:block;margin-bottom:6px;}
+  .field{margin-bottom:14px;}
+  textarea{resize:vertical;min-height:70px;}
+
+  .btn{
+    border:none;border-radius:999px;padding:11px 22px;font-weight:800;font-size:14px;
+    display:inline-flex;align-items:center;gap:8px;transition:.15s;
+  }
+  .btn-primary{background:var(--forest-mid);color:#fff;}
+  .btn-primary:hover{background:var(--forest-deep);}
+  .btn-outline{background:transparent;border:2px solid var(--forest-mid);color:var(--forest-mid);}
+  .btn-outline:hover{background:var(--forest-mid);color:#fff;}
+  .btn-danger{background:transparent;color:#b64b34;border:2px solid #f0c9bc;padding:6px 12px;font-size:12px;}
+  .btn-danger:hover{background:#fbeae4;}
+  .btn-sm{padding:7px 14px;font-size:12.5px;}
+
+  /* Perangkat kelas table */
+  table{width:100%;border-collapse:collapse;}
+  th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--forest-mid);padding:8px 10px;border-bottom:2px solid #e2ecdf;}
+  td{padding:10px;border-bottom:1px solid #eef3ea;font-size:14.5px;}
+  tr:last-child td{border-bottom:none;}
+  .role-pill{background:var(--mist);border:1px solid #dbe8db;padding:3px 10px;border-radius:999px;font-size:12.5px;font-weight:800;color:var(--forest-mid);}
+  .inline-form{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-top:14px;}
+  .inline-form .field{flex:1;min-width:140px;margin-bottom:0;}
+
+  .chip-list{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    background:#fff;border:2px solid #e2ecdf;border-radius:999px;padding:6px 8px 6px 14px;
+    display:flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;
+  }
+  .chip button{background:none;border:none;color:#b64b34;font-weight:900;font-size:14px;line-height:1;padding:4px;}
+
+  /* Wali kelas */
+  .wali-card{display:flex;gap:22px;align-items:center;flex-wrap:wrap;}
+  .wali-photo{
+    width:120px;height:120px;border-radius:50%;object-fit:cover;border:5px solid var(--bamboo);
+    background:#dfe9df;flex-shrink:0;
+  }
+  .wali-photo-placeholder{
+    width:120px;height:120px;border-radius:50%;border:5px solid var(--bamboo);
+    background:#dfe9df;display:flex;align-items:center;justify-content:center;font-size:44px;flex-shrink:0;
+  }
+  .wali-info .name{font-family:'Fredoka',sans-serif;font-size:22px;color:var(--forest-deep);}
+  .wali-info .moto{font-style:italic;color:#5b6b5c;margin:6px 0;}
+  .wali-info .kontak{font-size:13.5px;color:var(--forest-mid);font-weight:800;}
+
+  /* Gallery */
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px;margin-top:16px;}
+  .photo-card{
+    background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(36,64,47,0.1);
+    border:1px solid #eaf0e6;
+  }
+  .photo-card img{width:100%;height:150px;object-fit:cover;display:block;cursor:pointer;}
+  .photo-meta{padding:9px 12px;}
+  .photo-meta .uploader{font-size:12.5px;font-weight:800;color:var(--forest-deep);}
+  .photo-meta .caption{font-size:12px;color:#6b7a6b;margin-top:2px;}
+  .photo-meta .row{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+
+  .empty-state{
+    text-align:center;padding:36px 20px;color:#7a8a7a;font-weight:700;
+  }
+  .empty-state .emoji{font-size:38px;display:block;margin-bottom:8px;}
+
+  .lightbox{
+    position:fixed;inset:0;background:rgba(20,30,20,0.85);z-index:200;
+    display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .lightbox img{max-width:100%;max-height:80vh;border-radius:14px;}
+  .lightbox-close{position:absolute;top:20px;right:24px;background:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:18px;font-weight:900;}
+
+  /* Ulang tahun */
+  .ultah-hero{
+    background:linear-gradient(135deg,var(--lantern),#e39a5f);
+    border-radius:var(--radius-lg);padding:22px 26px;color:#fff;margin-bottom:22px;
+    display:flex;align-items:center;gap:16px;box-shadow:var(--shadow);
+  }
+  .ultah-hero .emoji{font-size:40px;}
+  .checkbox-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-top:6px;}
+  .checkbox-item{
+    display:flex;align-items:center;gap:8px;background:#fff;border:2px solid #e2ecdf;border-radius:12px;padding:8px 10px;font-size:13.5px;font-weight:700;
+  }
+  .ultah-entry{border-left:5px solid var(--lantern);padding:14px 16px;background:#fff;border-radius:0 14px 14px 0;margin-bottom:12px;}
+  .ultah-entry .who{font-family:'Fredoka',sans-serif;font-size:17px;color:var(--forest-deep);}
+  .ultah-entry .treat{margin:6px 0;font-weight:700;color:#8a5a3b;}
+  .ultah-entry .recipients{font-size:12.5px;color:#6b7a6b;}
+  .ultah-entry .date{font-size:11px;color:#a3ada3;margin-top:6px;}
+
+  .toast{
+    position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+    background:var(--forest-deep);color:#fff;padding:12px 22px;border-radius:999px;
+    font-weight:700;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,0.25);z-index:300;
+    animation:toastin .25s ease-out;
+  }
+  @keyframes toastin{from{opacity:0;transform:translate(-50%,10px);}to{opacity:1;transform:translate(-50%,0);}}
+
+  .footer-note{
+    text-align:center;color:#88997f;font-size:12.5px;padding:30px 20px 10px;
+  }
+
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(20,30,20,0.55);z-index:400;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+  }
+  .modal-box{
+    background:var(--cream);border-radius:var(--radius-lg);padding:26px;
+    width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,0.3);
+    animation:toastin .2s ease-out;
+  }
+  .modal-box h3{color:var(--forest-deep);margin-bottom:16px;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:8px;}
+
+  .shared-note{
+    font-size:12px;color:#7a8a7a;background:#f1f6ee;border:1px dashed #cfe0cb;padding:8px 12px;border-radius:10px;margin-bottom:16px;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand" data-nav="beranda">
+      <span class="brand-emoji">🐼</span>
+      <div class="brand-text">
+        <div class="name" id="brand-name">Sebelas TKJ 2</div>
+        <div class="tagline" id="brand-tagline">ruang kecil kita di telkom</div>
+      </div>
+    </div>
+    <div class="navlinks">
+      <button data-nav="beranda">🏡 Beranda</button>
+      <button data-nav="perangkat">🎋 Perangkat Kelas</button>
+      <button data-nav="wali">👩‍🏫 Wali Kelas</button>
+      <button data-nav="galeri">📸 Foto Sekelas</button>
+      <button data-nav="ultah">🎂 Ulang Tahun</button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+  <!-- ===================== BERANDA ===================== -->
+  <section id="sec-beranda">
+    <div class="scene-wrap">
+      <div class="hero-caption">
+        <div class="kelas-name" id="hero-kelas-name">Sebelas TKJ 2</div>
+        <div class="kelas-tagline" id="hero-kelas-tagline">ruang kecil kita di telkom</div>
+        <button class="edit-name-btn" id="btn-edit-nama">✏️ Ubah nama & tagline kelas</button>
+      </div>
+      <svg viewBox="0 0 800 420" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#cdeae4"/>
+            <stop offset="100%" stop-color="#f4f6e9"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="420" fill="url(#sky)"/>
+
+        <!-- clouds -->
+        <g opacity="0.85">
+          <ellipse class="cloud" cx="60" cy="60" rx="42" ry="16" fill="#ffffff" style="animation-duration:26s;"/>
+          <ellipse class="cloud" cx="95" cy="52" rx="28" ry="14" fill="#ffffff" style="animation-duration:26s;"/>
+          <ellipse class="cloud" cx="20" cy="120" rx="34" ry="13" fill="#ffffff" style="animation-duration:34s;animation-delay:-8s;"/>
+          <ellipse class="cloud" cx="55" cy="115" rx="24" ry="11" fill="#ffffff" style="animation-duration:34s;animation-delay:-8s;"/>
+          <ellipse class="cloud" cx="-40" cy="85" rx="30" ry="12" fill="#ffffff" style="animation-duration:20s;animation-delay:-14s;"/>
+        </g>
+
+        <!-- mountains -->
+        <path class="mountain-back" d="M0,220 L120,140 L230,210 L330,120 L460,215 L560,150 L680,215 L800,170 L800,420 L0,420 Z"/>
+        <path class="mountain-front" d="M0,260 L100,200 L200,250 L320,180 L440,255 L560,205 L700,260 L800,220 L800,420 L0,420 Z"/>
+
+        <!-- ground hill -->
+        <path class="hill" d="M0,320 C150,270 300,300 420,280 C560,258 680,300 800,270 L800,420 L0,420 Z"/>
+        <path fill="#4d7a56" d="M0,350 C160,320 320,345 460,325 C600,308 700,340 800,320 L800,420 L0,420 Z"/>
+
+        <!-- leaves falling -->
+        <g fill="#a9d15a">
+          <path class="leaf" d="M600,-10 q6,10 0,20 q-6,-10 0,-20" style="animation-duration:7s;animation-delay:-1s;"/>
+          <path class="leaf" d="M650,-30 q6,10 0,20 q-6,-10 0,-20" style="animation-duration:9s;animation-delay:-3s;"/>
+          <path class="leaf" d="M120,-20 q6,10 0,20 q-6,-10 0,-20" style="animation-duration:8s;animation-delay:-5s;"/>
+          <path class="leaf" d="M700,-50 q6,10 0,20 q-6,-10 0,-20" style="animation-duration:10s;animation-delay:-2s;"/>
+        </g>
+
+        <!-- bamboo left -->
+        <g class="bamboo-sway" style="animation-delay:0s;">
+          <rect x="60" y="150" width="10" height="220" rx="5" fill="#8fc06a"/>
+          <rect x="60" y="150" width="10" height="6" fill="#6fa04a"/>
+          <rect x="60" y="200" width="10" height="6" fill="#6fa04a"/>
+          <rect x="60" y="250" width="10" height="6" fill="#6fa04a"/>
+          <path d="M65,160 q40,-10 55,-35" stroke="#7fb85a" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M65,190 q-40,-6 -58,-28" stroke="#7fb85a" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </g>
+        <g class="bamboo-sway" style="animation-delay:-1.5s;">
+          <rect x="88" y="180" width="9" height="190" rx="4" fill="#7fb85a"/>
+          <path d="M92,190 q35,-8 48,-30" stroke="#8fc06a" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </g>
+
+        <!-- bamboo right -->
+        <g class="bamboo-sway" style="animation-delay:-2.4s;">
+          <rect x="700" y="140" width="11" height="230" rx="5" fill="#8fc06a"/>
+          <rect x="700" y="190" width="11" height="6" fill="#6fa04a"/>
+          <rect x="700" y="240" width="11" height="6" fill="#6fa04a"/>
+          <path d="M711,155 q-42,-8 -58,-32" stroke="#7fb85a" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <path d="M711,210 q45,-4 62,-26" stroke="#7fb85a" stroke-width="6" fill="none" stroke-linecap="round"/>
+        </g>
+        <g class="bamboo-sway" style="animation-delay:-0.8s;">
+          <rect x="735" y="175" width="9" height="195" rx="4" fill="#7fb85a"/>
+          <path d="M739,185 q-32,-6 -46,-28" stroke="#8fc06a" stroke-width="5" fill="none" stroke-linecap="round"/>
+        </g>
+
+        <!-- PANDA -->
+        <g class="panda-breathe" transform="translate(280,90)">
+          <!-- legs -->
+          <ellipse cx="150" cy="270" rx="26" ry="18" fill="#26241f"/>
+          <ellipse cx="250" cy="270" rx="26" ry="18" fill="#26241f"/>
+          <!-- body -->
+          <ellipse cx="200" cy="230" rx="95" ry="80" fill="#fbf8ef"/>
+          <!-- arms -->
+          <ellipse cx="115" cy="225" rx="24" ry="46" fill="#26241f"/>
+          <g class="panda-arm-wave">
+            <ellipse cx="285" cy="225" rx="24" ry="46" fill="#26241f"/>
+          </g>
+          <!-- head -->
+          <g transform="translate(0,-5)">
+            <!-- ears -->
+            <g class="panda-ear" style="transform-origin:150px 118px;">
+              <circle cx="150" cy="112" r="26" fill="#26241f"/>
+            </g>
+            <g class="panda-ear" style="transform-origin:250px 118px;animation-delay:-1.2s;">
+              <circle cx="250" cy="112" r="26" fill="#26241f"/>
+            </g>
+            <!-- face -->
+            <circle cx="200" cy="150" r="88" fill="#fefdf9"/>
+            <!-- eye patches -->
+            <ellipse cx="163" cy="150" rx="26" ry="34" fill="#26241f" transform="rotate(-12 163 150)"/>
+            <ellipse cx="237" cy="150" rx="26" ry="34" fill="#26241f" transform="rotate(12 237 150)"/>
+            <!-- eyes -->
+            <g class="pupils">
+              <circle cx="165" cy="152" r="9" fill="#fefdf9"/>
+              <circle cx="165" cy="154" r="4.5" fill="#26241f"/>
+              <circle cx="235" cy="152" r="9" fill="#fefdf9"/>
+              <circle cx="235" cy="154" r="4.5" fill="#26241f"/>
+            </g>
+            <!-- eyelids for blink -->
+            <rect class="eyelid" x="153" y="130" width="24" height="24" fill="#fefdf9" style="transform-origin:165px 130px;"/>
+            <rect class="eyelid" x="223" y="130" width="24" height="24" fill="#fefdf9" style="transform-origin:235px 130px;"/>
+            <!-- nose -->
+            <ellipse cx="200" cy="182" rx="11" ry="8" fill="#26241f"/>
+            <!-- mouth -->
+            <path d="M200,190 q0,14 -16,18 M200,190 q0,14 16,18" stroke="#26241f" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <!-- cheeks blush -->
+            <ellipse cx="140" cy="185" rx="10" ry="6" fill="#f3b6a3" opacity="0.55"/>
+            <ellipse cx="260" cy="185" rx="10" ry="6" fill="#f3b6a3" opacity="0.55"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="section-head" style="text-align:center;">
+      <span class="eyebrow">Selamat datang</span>
+      <h2>Halo, ini rumah kita 🎋</h2>
+      <p class="desc">Sama seperti panda yang tenang di antara pohon bambu, kelas ini adalah tempat kita berkumpul, saling kenal, dan merayakan hari-hari bersama.</p>
+    </div>
+
+    <div class="grid-2" style="grid-template-columns:repeat(4,1fr);gap:16px;">
+      <div class="card" style="cursor:pointer;text-align:center;padding:20px 14px;" data-nav="perangkat">
+        <div style="font-size:32px;">🎋</div>
+        <h3 style="font-size:15px;margin-top:8px;">Perangkat Kelas</h3>
+        <p class="desc" style="font-size:12.5px;">Struktur & anggota</p>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:20px 14px;" data-nav="wali">
+        <div style="font-size:32px;">👩‍🏫</div>
+        <h3 style="font-size:15px;margin-top:8px;">Wali Kelas</h3>
+        <p class="desc" style="font-size:12.5px;">Sosok pembimbing kita</p>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:20px 14px;" data-nav="galeri">
+        <div style="font-size:32px;">📸</div>
+        <h3 style="font-size:15px;margin-top:8px;">Foto Sekelas</h3>
+        <p class="desc" style="font-size:12.5px;">Kenangan bersama</p>
+      </div>
+      <div class="card" style="cursor:pointer;text-align:center;padding:20px 14px;" data-nav="ultah">
+        <div style="font-size:32px;">🎂</div>
+        <h3 style="font-size:15px;margin-top:8px;">Ulang Tahun</h3>
+        <p class="desc" style="font-size:12.5px;">Waktunya traktiran!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PERANGKAT KELAS ===================== -->
+  <section id="sec-perangkat" class="hidden">
+    <div class="section-head">
+      <span class="eyebrow">Struktur kelas</span>
+      <h2>Perangkat Kelas</h2>
+      <p class="desc">Susun jajaran pengurus kelas dan daftar anggota. Semua orang bisa menambah atau memperbarui datanya.</p>
+    </div>
+    <div class="shared-note">🎋 Data ini bisa dilihat & diubah oleh semua anggota kelas yang membuka halaman ini.</div>
+
+    <div class="card">
+      <h3>Jajaran Pengurus</h3>
+      <table>
+        <thead><tr><th>Jabatan</th><th>Nama</th><th></th></tr></thead>
+        <tbody id="perangkat-tbody"></tbody>
+      </table>
+      <div id="perangkat-empty" class="empty-state hidden"><span class="emoji">🎋</span>Belum ada perangkat kelas. Tambahkan yang pertama!</div>
+      <div class="inline-form">
+        <div class="field"><label>Jabatan</label><input type="text" id="input-peran" placeholder="Contoh: Ketua Kelas"></div>
+        <div class="field"><label>Nama</label><input type="text" id="input-peran-nama" placeholder="Nama lengkap"></div>
+        <button class="btn btn-primary" id="btn-add-perangkat">+ Tambah</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Daftar Anggota Kelas <span style="font-weight:400;font-size:13px;color:#7a8a7a;" id="jumlah-anggota"></span></h3>
+      <div class="chip-list" id="anggota-list"></div>
+      <div id="anggota-empty" class="empty-state hidden"><span class="emoji">🐾</span>Belum ada anggota terdaftar.</div>
+      <div class="inline-form">
+        <div class="field"><label>Nama anggota</label><input type="text" id="input-anggota" placeholder="Nama lengkap"></div>
+        <button class="btn btn-outline" id="btn-add-anggota">+ Tambah anggota</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WALI KELAS ===================== -->
+  <section id="sec-wali" class="hidden">
+    <div class="section-head">
+      <span class="eyebrow">Pembimbing kita</span>
+      <h2>Wali Kelas</h2>
+      <p class="desc">Kenalkan sosok wali kelas yang menemani perjalanan kelas ini.</p>
+    </div>
+    <div class="shared-note">🎋 Data ini bersama — siapa pun bisa memperbarui profil wali kelas.</div>
+
+    <div class="card">
+      <div class="wali-card">
+        <img id="wali-photo-img" class="wali-photo hidden" alt="Foto wali kelas">
+        <div id="wali-photo-placeholder" class="wali-photo-placeholder">👩‍🏫</div>
+        <div class="wali-info">
+          <div class="name" id="wali-name">Belum diisi</div>
+          <div class="moto" id="wali-moto"></div>
+          <div class="kontak" id="wali-kontak"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Ubah profil wali kelas</h3>
+      <div class="grid-2">
+        <div class="field"><label>Nama</label><input type="text" id="input-wali-nama" placeholder="Nama wali kelas"></div>
+        <div class="field"><label>Kontak (opsional)</label><input type="text" id="input-wali-kontak" placeholder="No. HP / email"></div>
+      </div>
+      <div class="field"><label>Motto / pesan</label><textarea id="input-wali-moto" placeholder="Pesan singkat dari wali kelas..."></textarea></div>
+      <div class="field"><label>Foto</label><input type="file" accept="image/*" id="input-wali-foto"></div>
+      <button class="btn btn-primary" id="btn-save-wali">💾 Simpan profil</button>
+    </div>
+  </section>
+
+  <!-- ===================== GALERI FOTO ===================== -->
+  <section id="sec-galeri" class="hidden">
+    <div class="section-head">
+      <span class="eyebrow">Kenangan bersama</span>
+      <h2>Foto Sekelas</h2>
+      <p class="desc">Unggah momen kebersamaan kalian. Semua anggota kelas bisa menambahkan foto.</p>
+    </div>
+    <div class="shared-note">🎋 Galeri ini terbuka untuk semua anggota kelas — foto yang diunggah akan terlihat oleh semua orang.</div>
+
+    <div class="card">
+      <h3>Unggah foto</h3>
+      <div class="grid-2">
+        <div class="field"><label>Nama kamu</label><input type="text" id="input-foto-nama" placeholder="Siapa yang mengunggah?"></div>
+        <div class="field"><label>Keterangan (opsional)</label><input type="text" id="input-foto-caption" placeholder="Contoh: Piknik kelas"></div>
+      </div>
+      <div class="field"><label>Pilih foto</label><input type="file" accept="image/*" id="input-foto-file"></div>
+      <button class="btn btn-primary" id="btn-upload-foto">⬆️ Unggah foto</button>
+    </div>
+
+    <div id="galeri-grid" class="gallery-grid"></div>
+    <div id="galeri-empty" class="empty-state hidden"><span class="emoji">📷</span>Belum ada foto. Jadilah yang pertama mengunggah!</div>
+  </section>
+
+  <!-- ===================== ULANG TAHUN ===================== -->
+  <section id="sec-ultah" class="hidden">
+    <div class="section-head">
+      <span class="eyebrow">Selebrasi</span>
+      <h2>Ulang Tahun</h2>
+      <p class="desc">Yang lagi ulang tahun, waktunya bagi-bagi traktiran ke teman sekelas! 🎉</p>
+    </div>
+
+    <div class="ultah-hero">
+      <div class="emoji">🎂</div>
+      <div>
+        <div style="font-family:'Fredoka',sans-serif;font-size:19px;">Lagi ulang tahun?</div>
+        <div style="font-size:13.5px;opacity:.9;">Pilih traktiran dan siapa saja yang kamu traktir dari anggota kelas.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Buat postingan traktiran</h3>
+      <div class="grid-2">
+        <div class="field">
+          <label>Yang ulang tahun</label>
+          <select id="input-ultah-nama"><option value="">— pilih dari anggota kelas —</option></select>
+        </div>
+        <div class="field"><label>Traktiran</label><input type="text" id="input-ultah-traktir" placeholder="Contoh: Es krim & donat"></div>
+      </div>
+      <div class="field">
+        <label>Traktir untuk siapa saja?</label>
+        <div id="checkbox-anggota" class="checkbox-grid"></div>
+      </div>
+      <button class="btn btn-primary" id="btn-post-ultah" style="margin-top:6px;">🎉 Bagikan traktiran</button>
+    </div>
+
+    <div class="card">
+      <h3>Riwayat traktiran</h3>
+      <div id="ultah-list"></div>
+      <div id="ultah-empty" class="empty-state hidden"><span class="emoji">🎈</span>Belum ada yang traktiran. Siapa yang duluan?</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="footer-note">🐾 Dibuat dengan hangat untuk kelas kita — seperti panda, kita santai tapi selalu saling jaga.</div>
+
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3>✏️ Ubah nama & tagline kelas</h3>
+    <div class="field">
+      <label>Nama kelas</label>
+      <input type="text" id="modal-input-nama" placeholder="Contoh: Sebelas TKJ 2">
+    </div>
+    <div class="field">
+      <label>Tagline kelas</label>
+      <input type="text" id="modal-input-tagline" placeholder="Contoh: ruang kecil kita di telkom">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline btn-sm" id="modal-cancel">Batal</button>
+      <button class="btn btn-primary btn-sm" id="modal-save">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- storage helpers ---------------- */
+  async function sGet(key){
+    try{ const r = await window.storage.get(key, true); return r ? JSON.parse(r.value) : null; }
+    catch(e){ return null; }
+  }
+  async function sSet(key, value){
+    try{ await window.storage.set(key, JSON.stringify(value), true); return true; }
+    catch(e){ console.error('storage set failed', e); return false; }
+  }
+  async function sDelete(key){
+    try{ await window.storage.delete(key, true); }catch(e){}
+  }
+  async function sList(prefix){
+    try{ const r = await window.storage.list(prefix, true); return (r && r.keys) ? r.keys : []; }
+    catch(e){ return []; }
+  }
+  function uid(){ return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7); }
+  function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function toast(msg){
+    const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+    document.body.appendChild(t); setTimeout(()=>t.remove(),2400);
+  }
+
+  function compressImage(file, maxWidth, quality){
+    maxWidth = maxWidth || 900; quality = quality || 0.72;
+    return new Promise((resolve,reject)=>{
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          let w=img.width, h=img.height;
+          if(w>maxWidth){ h = Math.round(h*(maxWidth/w)); w = maxWidth; }
+          const canvas=document.createElement('canvas');
+          canvas.width=w; canvas.height=h;
+          const ctx=canvas.getContext('2d');
+          ctx.drawImage(img,0,0,w,h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = () => reject(new Error('gagal memuat gambar'));
+        img.src = e.target.result;
+      };
+      reader.onerror = () => reject(new Error('gagal membaca file'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ---------------- navigation ---------------- */
+  const sections = ['beranda','perangkat','wali','galeri','ultah'];
+  function navTo(name){
+    sections.forEach(s=>{
+      document.getElementById('sec-'+s).classList.toggle('hidden', s!==name);
+    });
+    document.querySelectorAll('.navlinks button').forEach(b=>{
+      b.classList.toggle('active', b.dataset.nav===name);
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(name==='perangkat') loadPerangkat();
+    if(name==='wali') loadWali();
+    if(name==='galeri') loadGaleri();
+    if(name==='ultah'){ loadAnggotaForUltah(); loadUltah(); }
+  }
+  document.querySelectorAll('[data-nav]').forEach(el=>{
+    el.addEventListener('click', ()=> navTo(el.dataset.nav));
+  });
+
+  /* ---------------- kelas info (nama & tagline) ---------------- */
+  async function loadKelasInfo(){
+    const info = await sGet('kelas-info');
+    if(info){
+      document.getElementById('brand-name').textContent = info.nama || 'Sebelas TKJ 2';
+      document.getElementById('brand-tagline').textContent = info.tagline || 'ruang kecil kita di telkom';
+      document.getElementById('hero-kelas-name').textContent = info.nama || 'Sebelas TKJ 2';
+      document.getElementById('hero-kelas-tagline').textContent = info.tagline || 'ruang kecil kita di telkom';
+    }
+  }
+  const modalOverlay = document.getElementById('modal-overlay');
+  const modalInputNama = document.getElementById('modal-input-nama');
+  const modalInputTagline = document.getElementById('modal-input-tagline');
+
+  function openEditNamaModal(){
+    modalInputNama.value = document.getElementById('hero-kelas-name').textContent.trim();
+    modalInputTagline.value = document.getElementById('hero-kelas-tagline').textContent.trim();
+    modalOverlay.classList.remove('hidden');
+    modalInputNama.focus();
+  }
+  function closeEditNamaModal(){
+    modalOverlay.classList.add('hidden');
+  }
+  document.getElementById('btn-edit-nama').addEventListener('click', openEditNamaModal);
+  document.getElementById('modal-cancel').addEventListener('click', closeEditNamaModal);
+  modalOverlay.addEventListener('click', (e)=>{ if(e.target===modalOverlay) closeEditNamaModal(); });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='Escape' && !modalOverlay.classList.contains('hidden')) closeEditNamaModal();
+  });
+  document.getElementById('modal-save').addEventListener('click', async ()=>{
+    const nama = modalInputNama.value.trim();
+    const tagline = modalInputTagline.value.trim();
+    const info = {nama: nama || 'Sebelas TKJ 2', tagline: tagline || 'ruang kecil kita di telkom'};
+    await sSet('kelas-info', info);
+    loadKelasInfo();
+    closeEditNamaModal();
+    toast('Nama kelas diperbarui 🎋');
+  });
+
+  /* ---------------- PERANGKAT KELAS ---------------- */
+  async function loadPerangkat(){
+    const tbody = document.getElementById('perangkat-tbody');
+    tbody.innerHTML = '<tr><td colspan="3" style="color:#9aa89a;">Memuat...</td></tr>';
+    const list = (await sGet('kelas-perangkat')) || [];
+    if(list.length===0){
+      tbody.innerHTML='';
+      document.getElementById('perangkat-empty').classList.remove('hidden');
+    } else {
+      document.getElementById('perangkat-empty').classList.add('hidden');
+      tbody.innerHTML = list.map(item => `
+        <tr>
+          <td><span class="role-pill">${esc(item.peran)}</span></td>
+          <td>${esc(item.nama)}</td>
+          <td style="text-align:right;"><button class="btn-danger" data-remove-perangkat="${item.id}">Hapus</button></td>
+        </tr>
+      `).join('');
+    }
+    tbody.querySelectorAll('[data-remove-perangkat]').forEach(btn=>{
+      btn.addEventListener('click', async ()=>{
+        const id = btn.dataset.removePerangkat;
+        const cur = (await sGet('kelas-perangkat')) || [];
+        await sSet('kelas-perangkat', cur.filter(i=>i.id!==id));
+        loadPerangkat();
+      });
+    });
+    loadAnggota();
+  }
+  document.getElementById('btn-add-perangkat').addEventListener('click', async ()=>{
+    const peran = document.getElementById('input-peran').value.trim();
+    const nama = document.getElementById('input-peran-nama').value.trim();
+    if(!peran || !nama){ toast('Isi jabatan dan nama dulu ya'); return; }
+    const cur = (await sGet('kelas-perangkat')) || [];
+    cur.push({id: uid(), peran, nama});
+    await sSet('kelas-perangkat', cur);
+    document.getElementById('input-peran').value='';
+    document.getElementById('input-peran-nama').value='';
+    loadPerangkat();
+    toast('Perangkat kelas ditambahkan 🎋');
+  });
+
+  async function loadAnggota(){
+    const wrap = document.getElementById('anggota-list');
+    const list = (await sGet('kelas-anggota')) || [];
+    document.getElementById('jumlah-anggota').textContent = list.length ? `(${list.length} orang)` : '';
+    if(list.length===0){
+      wrap.innerHTML='';
+      document.getElementById('anggota-empty').classList.remove('hidden');
+    } else {
+      document.getElementById('anggota-empty').classList.add('hidden');
+      wrap.innerHTML = list.map(a => `
+        <span class="chip">🐼 ${esc(a.nama)} <button data-remove-anggota="${a.id}">✕</button></span>
+      `).join('');
+      wrap.querySelectorAll('[data-remove-anggota]').forEach(btn=>{
+        btn.addEventListener('click', async ()=>{
+          const id = btn.dataset.removeAnggota;
+          const cur = (await sGet('kelas-anggota')) || [];
+          await sSet('kelas-anggota', cur.filter(i=>i.id!==id));
+          loadAnggota();
+        });
+      });
+    }
+  }
+  document.getElementById('btn-add-anggota').addEventListener('click', async ()=>{
+    const nama = document.getElementById('input-anggota').value.trim();
+    if(!nama){ toast('Isi nama anggota dulu ya'); return; }
+    const cur = (await sGet('kelas-anggota')) || [];
+    cur.push({id: uid(), nama});
+    await sSet('kelas-anggota', cur);
+    document.getElementById('input-anggota').value='';
+    loadAnggota();
+    toast('Anggota kelas ditambahkan 🐾');
+  });
+
+  /* ---------------- WALI KELAS ---------------- */
+  async function loadWali(){
+    const w = await sGet('kelas-wali');
+    document.getElementById('wali-name').textContent = w && w.nama ? w.nama : 'Belum diisi';
+    document.getElementById('wali-moto').textContent = w && w.moto ? '“'+w.moto+'”' : '';
+    document.getElementById('wali-kontak').textContent = w && w.kontak ? '📞 '+w.kontak : '';
+    const img = document.getElementById('wali-photo-img');
+    const placeholder = document.getElementById('wali-photo-placeholder');
+    if(w && w.foto){
+      img.src = w.foto; img.classList.remove('hidden'); placeholder.classList.add('hidden');
+    } else {
+      img.classList.add('hidden'); placeholder.classList.remove('hidden');
+    }
+    if(w){
+      document.getElementById('input-wali-nama').value = w.nama || '';
+      document.getElementById('input-wali-kontak').value = w.kontak || '';
+      document.getElementById('input-wali-moto').value = w.moto || '';
+    }
+  }
+  document.getElementById('btn-save-wali').addEventListener('click', async ()=>{
+    const nama = document.getElementById('input-wali-nama').value.trim();
+    const kontak = document.getElementById('input-wali-kontak').value.trim();
+    const moto = document.getElementById('input-wali-moto').value.trim();
+    if(!nama){ toast('Isi nama wali kelas dulu ya'); return; }
+    const fileInput = document.getElementById('input-wali-foto');
+    const existing = (await sGet('kelas-wali')) || {};
+    let foto = existing.foto || '';
+    const btn = document.getElementById('btn-save-wali');
+    const originalText = btn.textContent;
+    btn.textContent = 'Menyimpan...'; btn.disabled = true;
+    try{
+      if(fileInput.files && fileInput.files[0]){
+        foto = await compressImage(fileInput.files[0], 500, 0.75);
+      }
+      await sSet('kelas-wali', {nama, kontak, moto, foto});
+      fileInput.value='';
+      loadWali();
+      toast('Profil wali kelas disimpan 👩‍🏫');
+    }catch(e){
+      toast('Gagal menyimpan, coba lagi ya');
+    }finally{
+      btn.textContent = originalText; btn.disabled = false;
+    }
+  });
+
+  /* ---------------- GALERI FOTO ---------------- */
+  async function loadGaleri(){
+    const grid = document.getElementById('galeri-grid');
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;color:#9aa89a;">Memuat foto...</div>';
+    const keys = await sList('foto:');
+    const items = [];
+    for(const k of keys){
+      const v = await sGet(k);
+      if(v) items.push(v);
+    }
+    items.sort((a,b)=> (b.date||'').localeCompare(a.date||''));
+    if(items.length===0){
+      grid.innerHTML='';
+      document.getElementById('galeri-empty').classList.remove('hidden');
+    } else {
+      document.getElementById('galeri-empty').classList.add('hidden');
+      grid.innerHTML = items.map(p => `
+        <div class="photo-card">
+          <img src="${p.image}" alt="${esc(p.caption||'Foto kelas')}" data-view="${p.id}">
+          <div class="photo-meta">
+            <div class="uploader">${esc(p.uploader||'Anonim')}</div>
+            ${p.caption ? `<div class="caption">${esc(p.caption)}</div>` : ''}
+            <div class="row"><span></span><button class="btn-danger" data-remove-foto="${p.id}">Hapus</button></div>
+          </div>
+        </div>
+      `).join('');
+      grid.querySelectorAll('[data-view]').forEach(img=>{
+        img.addEventListener('click', ()=>{
+          const item = items.find(i=>i.id===img.dataset.view);
+          openLightbox(item.image);
+        });
+      });
+      grid.querySelectorAll('[data-remove-foto]').forEach(btn=>{
+        btn.addEventListener('click', async function(){
+          if(this.dataset.confirming!=='1'){
+            this.dataset.confirming='1';
+            this.textContent='Yakin hapus?';
+            setTimeout(()=>{ if(this.dataset) { this.dataset.confirming='0'; this.textContent='Hapus'; } }, 3000);
+            return;
+          }
+          await sDelete('foto:'+this.dataset.removeFoto);
+          loadGaleri();
+          toast('Foto dihapus');
+        });
+      });
+    }
+  }
+  function openLightbox(src){
+    const box = document.createElement('div');
+    box.className='lightbox';
+    box.innerHTML = `<button class="lightbox-close">✕</button><img src="${src}">`;
+    box.addEventListener('click', (e)=>{ if(e.target===box) box.remove(); });
+    box.querySelector('.lightbox-close').addEventListener('click', ()=>box.remove());
+    document.body.appendChild(box);
+  }
+  document.getElementById('btn-upload-foto').addEventListener('click', async ()=>{
+    const uploader = document.getElementById('input-foto-nama').value.trim();
+    const caption = document.getElementById('input-foto-caption').value.trim();
+    const fileInput = document.getElementById('input-foto-file');
+    if(!uploader){ toast('Isi nama kamu dulu ya'); return; }
+    if(!fileInput.files || !fileInput.files[0]){ toast('Pilih foto dulu ya'); return; }
+    const btn = document.getElementById('btn-upload-foto');
+    const originalText = btn.textContent;
+    btn.textContent = 'Mengunggah...'; btn.disabled = true;
+    try{
+      const image = await compressImage(fileInput.files[0], 1000, 0.72);
+      const id = uid();
+      await sSet('foto:'+id, {id, uploader, caption, image, date: new Date().toISOString()});
+      document.getElementById('input-foto-nama').value='';
+      document.getElementById('input-foto-caption').value='';
+      fileInput.value='';
+      loadGaleri();
+      toast('Foto berhasil diunggah 📸');
+    }catch(e){
+      toast('Gagal mengunggah foto, coba lagi ya');
+    }finally{
+      btn.textContent = originalText; btn.disabled = false;
+    }
+  });
+
+  /* ---------------- ULANG TAHUN ---------------- */
+  async function loadAnggotaForUltah(){
+    const list = (await sGet('kelas-anggota')) || [];
+    const select = document.getElementById('input-ultah-nama');
+    select.innerHTML = '<option value="">— pilih dari anggota kelas —</option>' +
+      list.map(a=>`<option value="${esc(a.nama)}">${esc(a.nama)}</option>`).join('');
+    const checkWrap = document.getElementById('checkbox-anggota');
+    if(list.length===0){
+      checkWrap.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:14px;">Belum ada anggota kelas. Tambahkan dulu di halaman Perangkat Kelas.</div>';
+    } else {
+      checkWrap.innerHTML = list.map(a => `
+        <label class="checkbox-item"><input type="checkbox" value="${esc(a.nama)}"> ${esc(a.nama)}</label>
+      `).join('');
+    }
+  }
+  document.getElementById('btn-post-ultah').addEventListener('click', async ()=>{
+    const namaUltah = document.getElementById('input-ultah-nama').value;
+    const traktiran = document.getElementById('input-ultah-traktir').value.trim();
+    const checks = Array.from(document.querySelectorAll('#checkbox-anggota input[type=checkbox]:checked')).map(c=>c.value);
+    if(!namaUltah){ toast('Pilih siapa yang ulang tahun dulu ya'); return; }
+    if(!traktiran){ toast('Isi traktirannya dulu ya'); return; }
+    if(checks.length===0){ toast('Pilih minimal satu teman untuk ditraktir'); return; }
+    const id = uid();
+    await sSet('ultah:'+id, {id, namaUltah, traktiran, penerima: checks, tanggal: new Date().toISOString()});
+    document.getElementById('input-ultah-nama').value='';
+    document.getElementById('input-ultah-traktir').value='';
+    document.querySelectorAll('#checkbox-anggota input[type=checkbox]').forEach(c=>c.checked=false);
+    loadUltah();
+    toast('Selamat ulang tahun! Traktiran dibagikan 🎉');
+  });
+  async function loadUltah(){
+    const wrap = document.getElementById('ultah-list');
+    wrap.innerHTML = '<div style="color:#9aa89a;">Memuat...</div>';
+    const keys = await sList('ultah:');
+    const items = [];
+    for(const k of keys){
+      const v = await sGet(k);
+      if(v) items.push(v);
+    }
+    items.sort((a,b)=> (b.tanggal||'').localeCompare(a.tanggal||''));
+    if(items.length===0){
+      wrap.innerHTML='';
+      document.getElementById('ultah-empty').classList.remove('hidden');
+    } else {
+      document.getElementById('ultah-empty').classList.add('hidden');
+      wrap.innerHTML = items.map(it => {
+        const tgl = it.tanggal ? new Date(it.tanggal).toLocaleDateString('id-ID', {day:'numeric',month:'long',year:'numeric'}) : '';
+        return `
+          <div class="ultah-entry">
+            <div class="who">🎂 ${esc(it.namaUltah)} berulang tahun!</div>
+            <div class="treat">🍰 Traktiran: ${esc(it.traktiran)}</div>
+            <div class="recipients">Untuk: ${it.penerima.map(esc).join(', ')}</div>
+            <div class="date">${tgl}</div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  /* ---------------- init ---------------- */
+  loadKelasInfo();
+  navTo('beranda');
+})();
+</script>
+</body>
+</html>
